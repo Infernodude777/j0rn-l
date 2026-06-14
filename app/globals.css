@@ -1,0 +1,293 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-bg: 245 222 179;
+  --color-ink: 44 44 44;
+  --color-paper-edge: 224 213 186;
+
+  /* Ink tones — charcoal through warm gray to muted. */
+  --ink-deep: #2C2C2C;
+  --ink-soft: #5C5850;
+  --ink-muted: #8C8878;
+
+  /* Wheat surfaces — from body through cream cards to warm accents. */
+  --paper-1: #FBF2E0;
+  --paper-2: #F0E6CC;
+  --paper-3: #EDDFC0;
+  --paper-4: #E8D8B4;
+
+  /* Accent palette
+     Mint green drives primary actions (same lightness as wheat);
+     sage green warms secondary panels; gold whispers highlights. */
+  --accent-mint: #C5D8C0;
+  --accent-mint-hover: #B0C8A8;
+  --accent-sage: #9CAF92;
+  --accent-gold: #D4B872;
+  --accent-clay: #D4937A;
+
+  /* Semantic */
+  --error: #D4786E;
+  --error-soft: #F5E8E5;
+  --success: #9CAF92;
+  --success-soft: #E5EDE2;
+  --warning: #D4B872;
+  --warning-soft: #F8F2E0;
+
+  /* Fonts are loaded via the <link> in app/layout.tsx. */
+  --font-anton: 'Anton', sans-serif;
+  --font-changa-one: 'Changa One', serif;
+  --font-lexend: 'Lexend', sans-serif;
+  --font-nanum: 'Nanum Gothic', sans-serif;
+  --font-caveat: 'Caveat', cursive;
+  --font-kalam: 'Kalam', cursive;
+}
+
+html, body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  background-color: #F5DEB3;
+  background-image:
+    /* warm wheat vignette */
+    radial-gradient(circle at top, rgba(197, 216, 192, 0.06) 0%, transparent 50%),
+    /* faint paper grain */
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='400' height='400'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.36 0 0 0 0 0.28 0 0 0 0 0.12 0 0 0 0.06 0'/></filter><rect width='400' height='400' filter='url(%23n)' opacity='0.45'/></svg>");
+  background-attachment: fixed;
+  background-size: auto, 400px 400px;
+  color: var(--ink-deep);
+  min-height: 100dvh;
+  font-family: var(--font-lexend), Lexend, sans-serif;
+}
+
+/* ------------------------------------------------------------------ */
+/*  Wheat card system                                                   */
+/* ------------------------------------------------------------------ */
+
+/* Cream card — the default. */
+.paper-card {
+  position: relative;
+  background-color: var(--paper-1);
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.36 0 0 0 0 0.28 0 0 0 0 0.12 0 0 0 0.03 0'/></filter><rect width='200' height='200' filter='url(%23n)' opacity='0.35'/></svg>");
+  border: 1px solid #E0D5BA;
+  border-radius: 18px;
+  box-shadow:
+    0 2px 0 rgba(44, 44, 44, 0.04),
+    0 6px 14px -8px rgba(44, 44, 44, 0.08);
+}
+.paper-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='300'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='1.6' numOctaves='1' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.36 0 0 0 0 0.28 0 0 0 0 0.12 0 0 0 0.04 0'/></filter><rect width='300' height='300' filter='url(%23n)' opacity='0.12'/></svg>");
+  mix-blend-mode: multiply;
+  opacity: 0.35;
+}
+
+/* Warm wheat card — for wellness/whispers panels. */
+.paper-card-warm {
+  background-color: var(--paper-2);
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.45 0 0 0 0 0.38 0 0 0 0 0.25 0 0 0 0.04 0'/></filter><rect width='200' height='200' filter='url(%23n)' opacity='0.35'/></svg>");
+  border: 1px solid #D8C8A0;
+  border-radius: 18px;
+  box-shadow:
+    0 2px 0 rgba(44, 44, 44, 0.04),
+    0 6px 14px -8px rgba(44, 44, 44, 0.08);
+}
+
+/* Charcoal card — for the dark CTA button. */
+.paper-card-ink {
+  background-color: #2C2C2C;
+  color: #FBF2E0;
+  border: 1px solid #1A1A1A;
+  border-radius: 18px;
+  box-shadow:
+    0 2px 0 rgba(0, 0, 0, 0.15),
+    0 6px 14px -8px rgba(0, 0, 0, 0.30);
+}
+
+/* Old paper texture — kept for backward compat. */
+.paper-texture {
+  position: relative;
+}
+.paper-texture::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.36 0 0 0 0 0.28 0 0 0 0 0.12 0 0 0 0.03 0'/></filter><rect width='200' height='200' filter='url(%23n)' opacity='0.4'/></svg>");
+  opacity: 0.05;
+  pointer-events: none;
+  z-index: 0;
+  mix-blend-mode: multiply;
+}
+
+/* ------------------------------------------------------------------ */
+/*  Decorations                                                         */
+/* ------------------------------------------------------------------ */
+
+/* Mint thread binding stripe. */
+.notebook-binding {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 6px;
+  background: linear-gradient(
+    to bottom,
+    var(--accent-mint) 0%,
+    var(--accent-mint) 8%,
+    transparent 8%,
+    transparent 16%,
+    var(--accent-mint) 16%,
+    var(--accent-mint) 24%,
+    transparent 24%,
+    transparent 100%
+  );
+  opacity: 0.55;
+  border-top-left-radius: inherit;
+  border-bottom-left-radius: inherit;
+}
+
+/* Washi tape — gold-tinted. */
+.washi-tape {
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%) rotate(-1.5deg);
+  width: 64px;
+  height: 18px;
+  background: rgba(212, 184, 114, 0.55);
+  border: 1px dashed rgba(44, 44, 44, 0.10);
+  border-radius: 1px;
+  pointer-events: none;
+}
+
+/* Underline scribble — mint. */
+.ink-underline {
+  background-image: linear-gradient(transparent 70%, rgba(197, 216, 192, 0.30) 70%, rgba(197, 216, 192, 0.30) 90%, transparent 90%);
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  padding: 0 2px;
+}
+
+/* Handwritten accent class. */
+.font-hand {
+  font-family: var(--font-caveat), var(--font-kalam), cursive;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+}
+
+/* ------------------------------------------------------------------ */
+/*  Form controls                                                      */
+/* ------------------------------------------------------------------ */
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #D0C5AA;
+  border-radius: 10px;
+}
+
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: var(--accent-mint) !important;
+  box-shadow: 0 0 0 1px var(--accent-mint);
+}
+
+input[type='range'] {
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  width: 100%;
+}
+input[type='range']::-webkit-slider-runnable-track {
+  height: 6px;
+  background: #E0D5BA;
+  border-radius: 9999px;
+}
+input[type='range']::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 18px;
+  width: 18px;
+  border-radius: 9999px;
+  background: var(--accent-mint);
+  margin-top: -6px;
+  cursor: pointer;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+}
+input[type='range']::-moz-range-track {
+  height: 6px;
+  background: #E0D5BA;
+  border-radius: 9999px;
+}
+input[type='range']::-moz-range-thumb {
+  height: 18px;
+  width: 18px;
+  border-radius: 9999px;
+  background: var(--accent-mint);
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+}
+
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+
+.bg-decor-blob {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(80px);
+  opacity: 0.35;
+  pointer-events: none;
+}
+
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* ------------------------------------------------------------------ */
+/*  Animations                                                         */
+/* ------------------------------------------------------------------ */
+
+@keyframes pulse-soft {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+.animate-pulse-soft { animation: pulse-soft 2s ease-in-out infinite; }
+
+@keyframes shimmer {
+  0% { background-position: -200px 0; }
+  100% { background-position: calc(200px + 100%) 0; }
+}
+.shimmer {
+  background: linear-gradient(90deg, #FBF2E0 0%, #F0E6CC 50%, #FBF2E0 100%);
+  background-size: 200px 100%;
+  animation: shimmer 1.5s infinite linear;
+}
+
+/* Sketchy wobble for the "drawn" feel on hover. */
+@keyframes wobble {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(-0.5deg); }
+  75% { transform: rotate(0.5deg); }
+}
+.hover-wobble:hover { animation: wobble 0.4s ease-in-out; }
+
+/* Slight pulse for the wellness compass. */
+@keyframes compass-pulse {
+  0%, 100% { transform: rotate(0deg) scale(1); }
+  50%      { transform: rotate(2deg)  scale(1.04); }
+}
+.compass-pulse { animation: compass-pulse 4s ease-in-out infinite; transform-origin: center; }
