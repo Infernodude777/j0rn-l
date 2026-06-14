@@ -28,6 +28,61 @@ cp .env.local.example .env.local
 npm run dev
 ```
 
+## Deploy to GitHub Pages
+
+The app can be deployed as a **static site** to GitHub Pages. In this mode
+it runs entirely in the browser — all data is persisted to `localStorage`
+and no server is needed.
+
+### What works on Pages
+
+- Full UI: dashboard, check-in, journal, trends, insights, action plan
+- Local authentication (sign in with `admin`/`admin` for the demo account)
+- Check-in reflection (local lexicon fallback)
+- Web Speech API dictation (Chrome / Edge / Safari — no server needed)
+- Weekly insights and action plan generation (local deterministic fallback)
+
+### What doesn't work on Pages
+
+- **Supabase auth & storage** — No server runtime, so OAuth login and
+  persistent database storage aren't available. Sign in locally instead.
+- **AI-powered reflections** — The Blackbox API call requires a server
+  proxy (the key is server-side only). A deterministic local fallback
+  still produces useful output.
+- **Server-side speech-to-text** — The `/api/transcribe` endpoint won't
+  run. The Web Speech API dictation path (Chrome/Edge/Safari) works
+  independently.
+- **Discord bot**, **Instagram / iOS integrations** — These require
+  server webhooks and aren't available in static mode.
+- **Middleware** — Route protection is handled client-side while on Pages.
+
+### One-time setup
+
+1. Push the repo to GitHub:
+   ```bash
+   git remote add origin https://github.com/Infernodude777/j0rn-l.git
+   git branch -M main
+   git push -u origin main
+   ```
+
+2. Go to **Settings → Pages** in your GitHub repo.
+
+3. Under **Build and deployment → Source**, select **GitHub Actions**.
+   (The workflow is already configured at `.github/workflows/deploy.yml`.)
+
+4. Push to `main` — the action builds and deploys automatically.
+   The site will be live at:
+   👉 **https://infernodude777.github.io/j0rn-l/**
+
+### Build locally to test
+
+```bash
+npm run build
+npx serve out   # preview the static export locally
+```
+
+The `out/` directory is what gets uploaded to Pages.
+
 ## Database setup
 
 The app's data layer is a thin façade in `lib/db/api.ts` that hits Supabase

@@ -1,0 +1,62 @@
+# Deploy J0rn@l to GitHub Pages via Next.js static export
+#
+# Prerequisites:
+#   1. Push this repo to https://github.com/Infernodude777/j0rn-l
+#   2. Go to Settings → Pages → Source → "GitHub Actions"
+#   3. No other config needed — the workflow handles everything.
+#
+# The app runs in local-only demo mode when deployed to Pages
+# (all data lives in localStorage). API routes, Supabase auth,
+# and the middleware do not run.
+
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# Allow only one concurrent deployment; cancel in-flight runs for the
+# same branch so the latest push always wins.
+concurrency:
+  group: pages-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build (static export)
+        run: npm run build
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./out
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v5

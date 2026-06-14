@@ -9,6 +9,15 @@ import { getJournal } from '@/lib/db/api';
 import { useJournal } from '@/hooks/use-journal';
 import type { JournalEntry } from '@/lib/types';
 
+/**
+ * Required for static export (output: 'export' in next.config.mjs).
+ * Returns an empty array so Next.js doesn't try to pre-render specific
+ * journal entries — the client component handles data fetching at runtime.
+ */
+export function generateStaticParams() {
+  return [];
+}
+
 export default function JournalDetailPage() {
   const params = useParams<{ id: string }>();
   const router = useRouter();
